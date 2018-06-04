@@ -12,9 +12,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "birthYear")
     private Long birthYear;
+
+    @Column(name = "job")
     private String job;
+
+    @Column(name = "sex")
     private String sex;
 
     public Long getId() {
