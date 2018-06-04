@@ -1,5 +1,15 @@
 config: I still don't really understand what this is
 
+database:
+  driverClass: com.mysql.jdbc.Driver
+  user: root
+  password:
+  url: jdbc:mysql://localhost:3306/Example?useUnicode=true&characterEncoding=UTF-8&characterSetResults=UTF-8
+  properties:
+    hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
+    hibernate.hbm2ddl.auto: update
+
+
 server:
   type: simple
   applicationContextPath: /

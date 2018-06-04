@@ -1,5 +1,9 @@
-import io.dropwizard.Configuration;
+import io.dropwizard.db.PooledDataSourceFactory;
+import io.dropwizard.hibernate.HibernateBundle;
+import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import model.User;
+import model.UserDAO;
 import resource.UserResource;
 
 public class MyApplication extends io.dropwizard.Application<MyConfiguration> {
@@ -8,7 +12,19 @@ public class MyApplication extends io.dropwizard.Application<MyConfiguration> {
         new MyApplication().run(args);
     }
 
+    private HibernateBundle<MyConfiguration> hibernateBundle = new HibernateBundle<MyConfiguration>(User.class) {
+        public PooledDataSourceFactory getDataSourceFactory(MyConfiguration myConfiguration) {
+            return myConfiguration.getDatabase();
+        }
+    };
+
+    @Override
+    public void initialize(Bootstrap<MyConfiguration> bootstrap) {
+        bootstrap.addBundle(hibernateBundle);
+    }
+
     public void run(MyConfiguration myConfiguration, Environment environment) throws Exception {
-        environment.jersey().register(UserResource.class);
+        final UserDAO userDAO = new UserDAO(hibernateBundle.getSessionFactory());
+        environment.jersey().register(new UserResource(userDAO));
     }
 }
